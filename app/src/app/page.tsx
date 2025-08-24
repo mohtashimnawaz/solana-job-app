@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import WalletConnectButton from '@/components/WalletConnectButton';
-import WalletDebug from '@/components/WalletDebug';
-import WalletTransactionTest from '@/components/WalletTransactionTest';
 import StudentRegistration from '@/components/StudentRegistration';
 import VendorRegistration from '@/components/VendorRegistration';
 import JobBoard from '@/components/JobBoard';
@@ -143,9 +141,6 @@ export default function Home() {
           </div>
         )}
       </main>
-      
-      {/* Debug component - remove in production */}
-      <WalletDebug />
     </div>
   );
 }
