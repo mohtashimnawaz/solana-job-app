@@ -1,0 +1,332 @@
+{
+  "address": "DTbNxyP1MWLtgDHQiqWoAQGnQBee2g1AECxeQT1s5pUv",
+  "metadata": {
+    "name": "solana_job_app",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "apply_for_job",
+      "discriminator": [
+        74,
+        175,
+        208,
+        93,
+        192,
+        106,
+        92,
+        85
+      ],
+      "accounts": [
+        {
+          "name": "application",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "job"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [],
+      "args": []
+    },
+    {
+      "name": "post_job",
+      "discriminator": [
+        34,
+        208,
+        58,
+        248,
+        129,
+        234,
+        179,
+        211
+      ],
+      "accounts": [
+        {
+          "name": "job",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vendor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "pay",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_student",
+      "discriminator": [
+        108,
+        126,
+        219,
+        150,
+        153,
+        225,
+        102,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "college",
+          "type": "string"
+        },
+        {
+          "name": "study_field",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "register_vendor",
+      "discriminator": [
+        192,
+        133,
+        122,
+        251,
+        31,
+        137,
+        113,
+        141
+      ],
+      "accounts": [
+        {
+          "name": "vendor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Application",
+      "discriminator": [
+        219,
+        9,
+        27,
+        113,
+        208,
+        126,
+        203,
+        30
+      ]
+    },
+    {
+      "name": "Job",
+      "discriminator": [
+        75,
+        124,
+        80,
+        203,
+        161,
+        180,
+        202,
+        80
+      ]
+    },
+    {
+      "name": "Student",
+      "discriminator": [
+        173,
+        194,
+        250,
+        75,
+        154,
+        20,
+        81,
+        57
+      ]
+    },
+    {
+      "name": "Vendor",
+      "discriminator": [
+        87,
+        248,
+        121,
+        239,
+        24,
+        112,
+        197,
+        200
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "Application",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "student",
+            "type": "pubkey"
+          },
+          {
+            "name": "job",
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Job",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vendor",
+            "type": "pubkey"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "pay",
+            "type": "u64"
+          },
+          {
+            "name": "is_open",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Student",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "college",
+            "type": "string"
+          },
+          {
+            "name": "study_field",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vendor",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

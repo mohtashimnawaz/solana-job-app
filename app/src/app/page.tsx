@@ -1,8 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import WalletConnectButton from '@/components/WalletConnectButton';
+import WalletDebug from '@/components/WalletDebug';
+import WalletTransactionTest from '@/components/WalletTransactionTest';
+import StudentRegistration from '@/components/StudentRegistration';
+import VendorRegistration from '@/components/VendorRegistration';
+import JobBoard from '@/components/JobBoard';
+import PostJob from '@/components/PostJob';
 
 export default function Home() {
+  const { connected } = useWallet();
   const [userType, setUserType] = useState<'student' | 'vendor' | null>(null);
   const [isRegistered, setIsRegistered] = useState(false);
 
@@ -18,15 +27,32 @@ export default function Home() {
               </h1>
               <p className="ml-4 text-lg text-gray-600">Find Part-Time Jobs Near You</p>
             </div>
-            <div className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg">
-              Connect Wallet
-            </div>
+            <WalletConnectButton />
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {!userType && (
+        {!connected && (
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900 mb-8">
+              Welcome to Campus Connect! 👋
+            </h2>
+            <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+              Connect students with local vendors for amazing part-time job opportunities. 
+              Build your experience while earning money during your studies!
+            </p>
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-md mx-auto">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Started</h3>
+              <div className="text-gray-600 mb-6">
+                Connect your Solana wallet to start using Campus Connect and access the job marketplace.
+              </div>
+              <WalletConnectButton />
+            </div>
+          </div>
+        )}
+
+        {connected && !userType && (
           <div className="text-center">
             <h2 className="text-4xl font-bold text-gray-900 mb-8">
               Welcome to Campus Connect! 👋
@@ -74,22 +100,13 @@ export default function Home() {
           </div>
         )}
 
-        {userType && !isRegistered && (
+        {connected && userType && !isRegistered && (
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                {userType === 'student' ? 'Student Registration' : 'Vendor Registration'}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                Connect your wallet and register to get started!
-              </p>
-              <button
-                onClick={() => setIsRegistered(true)}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-lg font-semibold"
-              >
-                Register as {userType === 'student' ? 'Student' : 'Vendor'}
-              </button>
-            </div>
+            {userType === 'student' ? (
+              <StudentRegistration onRegistered={() => setIsRegistered(true)} />
+            ) : (
+              <VendorRegistration onRegistered={() => setIsRegistered(true)} />
+            )}
             <button
               onClick={() => setUserType(null)}
               className="mt-4 text-indigo-600 hover:text-indigo-800"
@@ -99,7 +116,7 @@ export default function Home() {
           </div>
         )}
 
-        {userType && isRegistered && (
+        {connected && userType && isRegistered && (
           <div>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900">
@@ -117,55 +134,18 @@ export default function Home() {
             </div>
 
             {userType === 'vendor' && (
-              <div className="mb-8 bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Post a New Job</h3>
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="Job Title"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  />
-                  <textarea
-                    placeholder="Job Description"
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Pay Rate (SOL per hour)"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  />
-                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold">
-                    Post Job
-                  </button>
-                </div>
+              <div className="mb-8">
+                <PostJob />
               </div>
             )}
 
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
-                {userType === 'student' ? 'Available Jobs' : 'Your Posted Jobs'}
-              </h3>
-              <div className="space-y-4">
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Coffee Shop Assistant</h4>
-                  <p className="text-gray-600 mb-4">Help with serving customers and maintaining a clean environment. Perfect for students!</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-green-600 font-semibold">0.5 SOL/hour</span>
-                    {userType === 'student' ? (
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                        Apply Now
-                      </button>
-                    ) : (
-                      <span className="text-gray-500">2 applications</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <JobBoard userType={userType} />
           </div>
         )}
       </main>
+      
+      {/* Debug component - remove in production */}
+      <WalletDebug />
     </div>
   );
 }
